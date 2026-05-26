@@ -1,0 +1,47 @@
+<div class="tl-page">
+  <div class="tl-announcement">
+    Enjoy 15% off your first purchase — use code <strong>FIRST-ORDER</strong> at checkout
+  </div>
+
+  <header class="tl-header">
+    <div class="tl-container tl-header-bar">
+      <a routerLink="/" class="tl-logo">ThreadLine</a>
+
+      <nav class="tl-nav-desktop">
+        <a routerLink="/" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+          New arrivals
+        </a>
+        <button type="button" (click)="navigateCategory('Women')" class="nav-link">Woman</button>
+        <button type="button" (click)="navigateCategory('Men')" class="nav-link">Men</button>
+        <button type="button" (click)="navigateCategory('Accessories')" class="nav-link">Accessories</button>
+        <a routerLink="/admin" routerLinkActive="nav-link-active" class="nav-link">Admin</a>
+      </nav>
+
+      <div class="tl-nav-actions">
+        <a routerLink="/admin" class="nav-link tl-nav-mobile-only">Admin</a>
+        <button type="button" (click)="openCart()" class="tl-icon-btn" aria-label="Open cart">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.25" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          @if ((cartCount$ | async)! > 0) {
+            <span class="tl-cart-badge">{{ cartCount$ | async }}</span>
+          }
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="tl-main">
+    <router-outlet />
+  </main>
+
+  <footer class="tl-footer">
+    <div class="tl-container">
+      <p class="tl-footer-logo">ThreadLine</p>
+      <p class="tl-footer-tagline">Curated apparel &amp; accessories</p>
+      <p class="tl-footer-copy">© {{ 2026 }} ThreadLine</p>
+    </div>
+  </footer>
+</div>
+
+<app-cart-sidebar [open]="cartOpen()" (closed)="closeCart()" />

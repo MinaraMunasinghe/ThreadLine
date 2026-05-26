@@ -1,0 +1,98 @@
+<div>
+  <section class="tl-container catalog-toolbar">
+    <div class="catalog-toolbar-inner">
+      <div class="catalog-tabs">
+        <button
+          type="button"
+          (click)="setTab('new')"
+          class="catalog-tab"
+          [class.catalog-tab--active]="activeTab() === 'new'"
+        >
+          New arrivals
+        </button>
+        <button
+          type="button"
+          (click)="setTab('all')"
+          class="catalog-tab"
+          [class.catalog-tab--active]="activeTab() === 'all'"
+        >
+          All products
+        </button>
+      </div>
+
+      <div class="catalog-filters">
+        <select class="catalog-select" [(ngModel)]="categoryFilter" (ngModelChange)="onCategoryChange()">
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ cat === 'All' ? 'All categories' : cat }}</option>
+          }
+        </select>
+        <select class="catalog-select" [(ngModel)]="sortOption">
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalog" class="tl-container catalog-section">
+    @if (loading()) {
+      <p class="catalog-status">Loading collection…</p>
+    } @else if (error()) {
+      <p class="catalog-error">{{ error() }}</p>
+    } @else if (!displayedProducts().length) {
+      <p class="catalog-status">No products in this collection.</p>
+    } @else {
+      <div class="product-grid">
+        @for (product of displayedProducts(); track product._id) {
+          <article class="product-card">
+            <div class="product-card__image-wrap">
+              <span class="product-card__hover-line" aria-hidden="true"></span>
+              <img [src]="product.imageUrl" [alt]="product.title" class="product-card__image" />
+
+              @if (product.stock === 0) {
+                <span class="product-card__badge">Sold out</span>
+              }
+
+              @if (product.stock > 0) {
+                <button type="button" (click)="quickAdd(product, $event)" class="product-card__quick-add">
+                  Quick add
+                </button>
+              }
+
+              @if (expandedCardId() === product._id && product.sizes.length > 1) {
+                <div class="product-card__size-panel" (click)="$event.stopPropagation()">
+                  <p class="product-card__size-label">Select size</p>
+                  <div class="product-card__sizes">
+                    @for (size of product.sizes; track size) {
+                      <button
+                        type="button"
+                        (click)="setSelectedSize(product._id, size); addToCart(product); expandedCardId.set(null)"
+                        class="size-btn"
+                        [class.size-btn--active]="getSelectedSize(product) === size"
+                      >
+                        {{ size }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="product-card__info">
+              <h2 class="product-card__title">{{ product.title }}</h2>
+              <p class="product-card__price">Rs {{ product.price | number }}</p>
+              <p class="product-card__meta">{{ sizesLabel(product) }}</p>
+              @if (product.sizes.length > 1) {
+                <div class="product-card__swatches" aria-hidden="true">
+                  @for (size of product.sizes.slice(0, 4); track size) {
+                    <span class="product-card__swatch" [title]="size"></span>
+                  }
+                </div>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

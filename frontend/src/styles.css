@@ -1,0 +1,4 @@
+/* Tailwind utilities (optional layer — global.css has core theme) */
+@import 'tailwindcss';
+@source './app/**/*.{html,ts}';
+@source './index.html';

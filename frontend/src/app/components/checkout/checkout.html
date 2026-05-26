@@ -1,0 +1,97 @@
+<section class="tl-container checkout-page">
+  <div class="checkout-header">
+    <p class="admin-kicker">Secure checkout</p>
+    <h1 class="checkout-title">Complete your order</h1>
+  </div>
+
+  @if (error()) {
+    <p class="catalog-error" style="margin-top: 1.5rem">{{ error() }}</p>
+  }
+
+  <div class="checkout-grid">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="checkout-card">
+        <h2 class="checkout-card-title">Contact &amp; billing</h2>
+        <div class="checkout-fields checkout-fields--2">
+          <div class="checkout-field">
+            <label>First name</label>
+            <input formControlName="firstName" class="field-input" />
+          </div>
+          <div class="checkout-field">
+            <label>Last name</label>
+            <input formControlName="lastName" class="field-input" />
+          </div>
+        </div>
+        <div class="checkout-fields checkout-fields--2" style="margin-top: 1rem">
+          <div class="checkout-field">
+            <label>Email</label>
+            <input type="email" formControlName="email" class="field-input" />
+          </div>
+          <div class="checkout-field">
+            <label>Phone</label>
+            <input formControlName="phone" class="field-input" />
+          </div>
+        </div>
+        <div class="checkout-field" style="margin-top: 1rem">
+          <label>Billing address</label>
+          <input formControlName="address" class="field-input" />
+        </div>
+        <div class="checkout-fields checkout-fields--2" style="margin-top: 1rem">
+          <div class="checkout-field">
+            <label>City</label>
+            <input formControlName="city" class="field-input" />
+          </div>
+          <div class="checkout-field">
+            <label>Country</label>
+            <input formControlName="country" class="field-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-card" style="margin-top: 1.5rem">
+        <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer">
+          <input
+            type="checkbox"
+            [checked]="shipToDifferent()"
+            (change)="toggleDifferentAddress($any($event.target).checked)"
+          />
+          <span>Ship to a different delivery address</span>
+        </label>
+
+        <div
+          class="checkout-delivery-panel"
+          [class.checkout-delivery-panel--open]="shipToDifferent()"
+          [class.checkout-delivery-panel--closed]="!shipToDifferent()"
+        >
+          <div class="checkout-field">
+            <label>Delivery address</label>
+            <input formControlName="shippingAddress" class="field-input" />
+          </div>
+          <div class="checkout-field">
+            <label>Delivery city</label>
+            <input formControlName="shippingCity" class="field-input" />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="submitting()" class="btn-primary" style="width: 100%; margin-top: 1.5rem">
+        {{ submitting() ? 'Redirecting to PayHere…' : 'Pay with PayHere' }}
+      </button>
+    </form>
+
+    <aside class="checkout-card">
+      <h2 class="checkout-card-title">Order summary</h2>
+      @for (item of cartItems$ | async; track item.productId + item.size) {
+        <div class="checkout-summary-item">
+          <span>{{ item.title }} ({{ item.size }}) × {{ item.quantity }}</span>
+          <span>Rs {{ item.price * item.quantity | number }}</span>
+        </div>
+      }
+      <div class="checkout-total">
+        <span class="cart-subtotal-label">Total</span>
+        <span>Rs {{ cartTotal$ | async | number }}</span>
+      </div>
+      <a routerLink="/" class="checkout-back">← Continue shopping</a>
+    </aside>
+  </div>
+</section>

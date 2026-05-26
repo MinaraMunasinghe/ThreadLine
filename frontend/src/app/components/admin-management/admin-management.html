@@ -1,0 +1,142 @@
+<section class="tl-container admin-page">
+  <div class="admin-header">
+    <div>
+      <p class="admin-kicker">Inventory</p>
+      <h1 class="admin-title">Admin dashboard</h1>
+      <p class="admin-subtitle">Manage products synced live with MongoDB.</p>
+    </div>
+    <button type="button" (click)="startCreate(); showForm.set(true)" class="btn-primary">+ Add product</button>
+  </div>
+
+  @if (message()) {
+    <p class="admin-message">{{ message() }}</p>
+  }
+
+  <div class="admin-stats">
+    <div class="stat-card">
+      <p class="stat-card__label">Total products</p>
+      <p class="stat-card__value">{{ totalProducts() }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-card__label">Featured</p>
+      <p class="stat-card__value">{{ featuredCount() }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-card__label">Low stock</p>
+      <p class="stat-card__value">{{ lowStockCount() }}</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-card__label">Out of stock</p>
+      <p class="stat-card__value">{{ outOfStockCount() }}</p>
+    </div>
+  </div>
+
+  <div class="admin-layout" [class.admin-layout--full]="!showForm()">
+    @if (showForm()) {
+      <form [formGroup]="form" (ngSubmit)="save()" class="admin-form">
+        <h2 class="admin-form-title">{{ editingId() ? 'Edit product' : 'New product' }}</h2>
+
+        <div class="field-group">
+          <label>Title</label>
+          <input formControlName="title" class="admin-input" />
+        </div>
+        <div class="field-group">
+          <label>Description</label>
+          <textarea formControlName="description" rows="3" class="admin-input"></textarea>
+        </div>
+        <div class="admin-form-row">
+          <div class="field-group">
+            <label>Price (LKR)</label>
+            <input type="number" formControlName="price" class="admin-input" />
+          </div>
+          <div class="field-group">
+            <label>Stock</label>
+            <input type="number" formControlName="stock" class="admin-input" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Category</label>
+          <select formControlName="category" class="admin-input">
+            @for (c of categories; track c) {
+              <option [value]="c">{{ c }}</option>
+            }
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Sizes (comma-separated)</label>
+          <input formControlName="sizes" class="admin-input" />
+        </div>
+        <div class="field-group">
+          <label>Image URL</label>
+          <input formControlName="imageUrl" class="admin-input" />
+        </div>
+        <label class="field-group" style="display: flex; align-items: center; gap: 0.5rem">
+          <input type="checkbox" formControlName="isFeatured" />
+          Featured (New arrivals)
+        </label>
+
+        <div class="admin-form-actions">
+          <button type="submit" [disabled]="saving()" class="btn-primary" style="flex: 1">
+            {{ saving() ? 'Saving…' : editingId() ? 'Update' : 'Create' }}
+          </button>
+          <button type="button" (click)="startCreate()" class="btn-outline-sm">Reset</button>
+        </div>
+      </form>
+    }
+
+    <div class="admin-panel">
+      <div class="admin-panel-header">
+        <h2 class="admin-panel-title">Product inventory</h2>
+        @if (!showForm()) {
+          <button type="button" (click)="showForm.set(true)" class="btn-outline-sm">Show form</button>
+        }
+      </div>
+
+      @if (loading()) {
+        <p class="catalog-status">Loading inventory…</p>
+      } @else {
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of products(); track p._id) {
+                <tr>
+                  <td>
+                    <div class="admin-product-cell">
+                      <img [src]="p.imageUrl" [alt]="p.title" class="admin-product-thumb" />
+                      <div>
+                        <p class="admin-product-name">{{ p.title }}</p>
+                        @if (p.isFeatured) {
+                          <span class="product-card__meta">Featured</span>
+                        }
+                      </div>
+                    </div>
+                  </td>
+                  <td style="color: var(--tl-text-muted)">{{ p.category }}</td>
+                  <td>Rs {{ p.price | number }}</td>
+                  <td>
+                    <span class="stock-badge" [class]="stockBadgeClass(p.stock)">{{ p.stock }}</span>
+                  </td>
+                  <td style="text-align: right">
+                    <button type="button" (click)="startEdit(p)" class="btn-outline-sm">Edit</button>
+                    <button type="button" (click)="deleteProduct(p._id)" class="btn-outline-sm btn-outline-sm--danger" style="margin-left: 0.5rem">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+@if (open()) {
+  <div class="cart-overlay" (click)="close()"></div>
+}
+
+<aside class="cart-drawer" [class.cart-drawer--open]="open()" [class.cart-drawer--closed]="!open()">
+  <div class="cart-header">
+    <h2 class="cart-title">Your bag</h2>
+    <button type="button" (click)="close()" class="cart-close" aria-label="Close">✕</button>
+  </div>
+
+  <div class="cart-body">
+    @if ((items$ | async)?.length === 0) {
+      <p class="cart-empty">Your bag is empty.</p>
+    } @else {
+      @for (item of items$ | async; track item.productId + item.size) {
+        <div class="cart-item">
+          <img [src]="item.imageUrl" [alt]="item.title" class="cart-item-thumb" />
+          <div>
+            <p class="cart-item-name">{{ item.title }}</p>
+            <p class="cart-item-size">Size {{ item.size }}</p>
+            <p class="cart-item-price">Rs {{ item.price | number }}</p>
+            <div class="cart-qty">
+              <button type="button" (click)="updateQty(item.productId, item.size, item.quantity - 1)" class="cart-qty-btn">−</button>
+              <span>{{ item.quantity }}</span>
+              <button type="button" (click)="updateQty(item.productId, item.size, item.quantity + 1)" class="cart-qty-btn">+</button>
+              <button type="button" (click)="remove(item.productId, item.size)" class="cart-remove">Remove</button>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">Subtotal</span>
+      <span>Rs {{ total$ | async | number }}</span>
+    </div>
+    <a routerLink="/checkout" (click)="close()" class="btn-primary" style="display: block; width: 100%; text-align: center">Checkout</a>
+  </div>
+</aside>

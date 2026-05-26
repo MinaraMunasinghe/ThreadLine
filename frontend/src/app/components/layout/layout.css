@@ -1,0 +1,7 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #fff;
+  color: #000;
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
