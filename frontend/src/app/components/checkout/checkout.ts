@@ -21,6 +21,7 @@ export class Checkout {
   protected readonly submitting = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly shipToDifferent = signal(false);
+  protected readonly paymentMethod = signal<'card' | 'cod'>('card');
 
   protected readonly form = this.fb.nonNullable.group({
     firstName: ['', Validators.required],

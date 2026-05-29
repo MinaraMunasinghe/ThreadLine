@@ -74,8 +74,45 @@
         </div>
       </div>
 
+      <div class="checkout-card" style="margin-top: 1.5rem">
+        <h2 class="checkout-card-title">Select Payment Method</h2>
+        <div class="payment-methods">
+          <label class="payment-option" [class.payment-option--active]="paymentMethod() === 'card'">
+            <div class="payment-option-header">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="card"
+                [checked]="paymentMethod() === 'card'"
+                (change)="paymentMethod.set('card')"
+              />
+              <span class="payment-option-title">Credit / Debit Card</span>
+            </div>
+            <div class="payment-card-icons">
+              <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" width="32" />
+              <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard" width="32" />
+              <img src="https://img.icons8.com/color/48/000000/amex.png" alt="AMEX" width="32" />
+            </div>
+          </label>
+
+          <label class="payment-option" [class.payment-option--active]="paymentMethod() === 'cod'">
+            <div class="payment-option-header">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="cod"
+                [checked]="paymentMethod() === 'cod'"
+                (change)="paymentMethod.set('cod')"
+              />
+              <span class="payment-option-title">Cash on Delivery</span>
+            </div>
+            <p class="payment-option-desc">Pay with cash upon delivery.</p>
+          </label>
+        </div>
+      </div>
+
       <button type="submit" [disabled]="submitting()" class="btn-primary" style="width: 100%; margin-top: 1.5rem">
-        {{ submitting() ? 'Redirecting to PayHere…' : 'Pay with PayHere' }}
+        {{ submitting() ? 'Processing…' : (paymentMethod() === 'card' ? 'Pay with PayHere' : 'Place Order') }}
       </button>
     </form>
 

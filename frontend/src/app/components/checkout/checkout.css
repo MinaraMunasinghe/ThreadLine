@@ -1,1 +1,51 @@
 /* Uses global .field-input from styles.css */
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.payment-option {
+  display: block;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-option:hover {
+  background-color: #f9fafb;
+}
+
+.payment-option--active {
+  border-color: #000;
+  background-color: #f8fafc;
+}
+
+.payment-option-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.payment-option-title {
+  font-weight: 500;
+  color: #111827;
+}
+
+.payment-card-icons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  margin-left: 1.75rem;
+}
+
+.payment-option-desc {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  margin-left: 1.75rem;
+}
