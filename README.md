@@ -68,3 +68,6 @@ Shared domain types live in:
 - `frontend/src/app/core/models/product.ts` & `order.ts`
 
 Keep these in sync when extending schemas.
+
+## 🚀 Upcoming Development
+* **Payment Gateway Integration:** The architecture for credit/debit card processing is currently being integrated via PayHere to provide a secure and seamless checkout experience for users.
