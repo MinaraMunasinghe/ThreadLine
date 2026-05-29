@@ -1,3 +1,5 @@
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '8.8.4.4']); // Forces use of Google DNS
 import app from './app';
 import { env } from './config/env';
 import { connectDatabase } from './config/db';

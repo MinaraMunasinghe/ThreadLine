@@ -3,6 +3,7 @@ import cors from 'cors';
 import { env } from './config/env';
 import productRoutes from './routes/productRoutes';
 import paymentRoutes from './routes/paymentRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', service: 'ThreadLine API' });
 });
 
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/payments', paymentRoutes);
 

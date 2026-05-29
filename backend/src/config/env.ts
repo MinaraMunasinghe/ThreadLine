@@ -20,6 +20,7 @@ export const env = {
   mongodbUri: requireEnv('MONGODB_URI'),
   clientUrl: optionalEnv('CLIENT_URL', 'http://localhost:4200'),
   adminApiKey: optionalEnv('ADMIN_API_KEY', 'dev-admin-key'),
+  jwtSecret: requireEnv('JWT_SECRET'),
   payhere: {
     merchantId: optionalEnv('PAYHERE_MERCHANT_ID', '1210001'),
     merchantSecret: optionalEnv('PAYHERE_MERCHANT_SECRET', 'sandbox-secret'),
